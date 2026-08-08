@@ -9,21 +9,25 @@ import { Faq } from "./components/Faq"
 import { Contact } from "./components/Contact"
 import { Footer } from "./components/Footer"
 import { MobileCta } from "./components/MobileCta"
+import { SiteBackground } from "./components/three/SiteBackground"
 
 function App() {
   return (
     <div className="overflow-x-hidden bg-background pb-[72px] md:pb-0">
-      <Nav />
-      <Hero />
-      <Problem />
-      <Offers />
-      <Roi />
-      <Steps />
-      <Trust />
-      <Faq />
-      <Contact />
-      <Footer />
-      <MobileCta />
+      <SiteBackground />
+      <div className="relative z-10">
+        <Nav />
+        <Hero />
+        <Problem />
+        <Offers />
+        <Roi />
+        <Steps />
+        <Trust />
+        <Faq />
+        <Contact />
+        <Footer />
+        <MobileCta />
+      </div>
     </div>
   )
 }

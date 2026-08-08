@@ -1,5 +1,7 @@
 import { useState } from "react"
+import { AnimatePresence, motion } from "motion/react"
 import { Reveal } from "./ui/reveal"
+import { duration, ease, stagger } from "@/lib/motion-tokens"
 
 const faqs = [
   {
@@ -26,31 +28,50 @@ export function Faq() {
   return (
     <section className="mx-auto max-w-[900px] px-5 py-16 sm:px-8 sm:py-24 md:px-16">
       <Reveal>
-        <h2 className="mb-10 text-[clamp(28px,4vw,40px)] font-extrabold tracking-tight text-foreground">
+        <h2 className="mb-10 text-[clamp(28px,4vw,40px)] font-bold tracking-[-0.015em] text-foreground">
           Questions fréquentes
         </h2>
       </Reveal>
-      <Reveal delay={0.05}>
-        <div className="flex flex-col gap-px overflow-hidden rounded-[20px] border border-border bg-border">
+      <Reveal delay={stagger}>
+        <div className="flex flex-col gap-px overflow-hidden border border-line bg-line">
           {faqs.map((item, i) => {
             const isOpen = open === i
             return (
               <div
                 key={item.q}
-                className="cursor-pointer bg-card px-6 py-6 sm:px-7"
+                role="button"
+                tabIndex={0}
+                aria-expanded={isOpen}
+                className="cursor-pointer bg-card px-6 py-6 outline-none transition-colors duration-[140ms] ease-signature focus-visible:bg-surface-2 sm:px-7"
                 onClick={() => setOpen(isOpen ? -1 : i)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault()
+                    setOpen(isOpen ? -1 : i)
+                  }
+                }}
               >
                 <div className="flex items-center justify-between gap-4">
                   <h3 className="m-0 text-[17px] font-bold text-foreground">{item.q}</h3>
                   <span
-                    className={`flex-shrink-0 text-xl font-extrabold text-accent transition-transform duration-200 ${isOpen ? "rotate-45" : ""}`}
+                    className={`flex-shrink-0 text-xl font-bold text-primary transition-transform duration-[140ms] ease-signature ${isOpen ? "rotate-45" : ""}`}
                   >
                     +
                   </span>
                 </div>
-                {isOpen && (
-                  <p className="mt-3.5 max-w-[600px] text-[15px] font-medium text-muted-foreground">{item.a}</p>
-                )}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.p
+                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                      animate={{ opacity: 1, height: "auto", marginTop: 14 }}
+                      exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                      transition={{ duration: duration.normal, ease: ease.signature }}
+                      className="max-w-[600px] overflow-hidden text-[15px] font-medium text-haze"
+                    >
+                      {item.a}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
             )
           })}

@@ -1,5 +1,6 @@
 import { motion } from "motion/react"
 import type { ReactNode } from "react"
+import { duration, ease } from "@/lib/motion-tokens"
 
 export function Reveal({
   children,
@@ -12,10 +13,10 @@ export function Reveal({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.7, ease: [0.2, 0.7, 0.3, 1], delay }}
+      transition={{ duration: duration.slow, ease: ease.signature, delay }}
       className={className}
     >
       {children}

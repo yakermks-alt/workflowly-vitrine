@@ -1,7 +1,11 @@
 import { useState, type FormEvent } from "react"
 import { Reveal } from "./ui/reveal"
+import { stagger } from "@/lib/motion-tokens"
 
 const WEBHOOK_URL = "https://n8n.workflowly.fr/webhook/workflowly-contact"
+
+const inputClass =
+  "w-full border border-line-strong bg-surface-2 px-3.5 py-3 text-[15px] text-foreground outline-none transition-colors duration-[140ms] ease-signature placeholder:text-haze focus-visible:border-primary"
 
 export function Contact() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle")
@@ -26,20 +30,20 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="bg-foreground px-5 py-16 sm:px-8 sm:py-24 md:px-16">
+    <section id="contact" className="relative border-t border-line bg-surface-2/70 px-5 py-16 backdrop-blur-sm sm:px-8 sm:py-24 md:px-16">
       <div className="mx-auto grid max-w-[1040px] gap-14 md:grid-cols-2">
         <Reveal>
-          <h2 className="mb-4 text-[clamp(28px,4vw,42px)] font-extrabold tracking-tight text-white text-balance">
+          <h2 className="mb-4 text-[clamp(28px,4vw,42px)] font-bold tracking-[-0.015em] text-foreground text-balance">
             Prêt à automatiser votre visibilité ?
           </h2>
-          <p className="mb-7 text-base font-medium text-white/70">
+          <p className="mb-7 text-base font-medium text-haze">
             Laissez-nous vos coordonnées, on vous rappelle sous 24h pour un échange de 30 minutes, sans engagement.
           </p>
-          <div className="flex flex-col gap-3 text-[15px] font-semibold text-white/75">
+          <div className="flex flex-col gap-3 text-[15px] font-semibold text-foreground/80">
             <div>Zone Annecy · Évian · Léman</div>
             <div>contact@workflowly.fr</div>
             <div>
-              <a href="tel:+33767171163" className="text-white/75 hover:text-accent">
+              <a href="tel:+33767171163" className="transition-colors duration-[140ms] ease-signature hover:text-primary">
                 +33 7 67 17 11 63
               </a>
             </div>
@@ -51,28 +55,28 @@ export function Contact() {
               href="https://cal.com/CAL_LINK"
               target="_blank"
               rel="noreferrer"
-              className="inline-block rounded-full border-2 border-white/30 px-6 py-3 text-sm font-bold text-white hover:border-accent hover:text-accent"
+              className="inline-block border border-line-strong px-6 py-3 text-sm font-semibold text-foreground transition-colors duration-[140ms] ease-signature hover:border-primary hover:text-primary"
             >
               Ou réservez directement un créneau →
             </a>
           </div>
         </Reveal>
 
-        <Reveal delay={0.1}>
+        <Reveal delay={stagger}>
           {status === "sent" ? (
-            <div className="flex flex-col items-center justify-center gap-3.5 rounded-3xl bg-white p-11 text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-xl font-extrabold text-accent-foreground">
+            <div className="flex flex-col items-center justify-center gap-3.5 border border-line bg-card p-11 text-center">
+              <div className="flex h-12 w-12 items-center justify-center bg-primary text-xl font-bold text-primary-foreground">
                 ✓
               </div>
-              <h3 className="m-0 text-xl font-extrabold text-foreground">Merci {name} !</h3>
-              <p className="m-0 text-[15px] font-medium text-muted-foreground">
+              <h3 className="m-0 text-xl font-bold text-foreground">Merci {name} !</h3>
+              <p className="m-0 text-[15px] font-medium text-haze">
                 Nous revenons vers vous sous 24h pour {restaurant}.
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-3xl bg-white p-8">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 border border-line bg-card p-8">
               <div>
-                <label htmlFor="f-name" className="mb-1.5 block text-[13px] font-bold text-muted-foreground">
+                <label htmlFor="f-name" className="mb-1.5 block text-[13px] font-bold text-haze">
                   Nom
                 </label>
                 <input
@@ -82,11 +86,11 @@ export function Contact() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-background px-3.5 py-3 text-[15px] text-foreground"
+                  className={inputClass}
                 />
               </div>
               <div>
-                <label htmlFor="f-restaurant" className="mb-1.5 block text-[13px] font-bold text-muted-foreground">
+                <label htmlFor="f-restaurant" className="mb-1.5 block text-[13px] font-bold text-haze">
                   Restaurant
                 </label>
                 <input
@@ -96,41 +100,30 @@ export function Contact() {
                   required
                   value={restaurant}
                   onChange={(e) => setRestaurant(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-background px-3.5 py-3 text-[15px] text-foreground"
+                  className={inputClass}
                 />
               </div>
               <div>
-                <label htmlFor="f-phone" className="mb-1.5 block text-[13px] font-bold text-muted-foreground">
+                <label htmlFor="f-phone" className="mb-1.5 block text-[13px] font-bold text-haze">
                   Téléphone
                 </label>
-                <input
-                  id="f-phone"
-                  name="phone"
-                  type="tel"
-                  required
-                  className="w-full rounded-xl border border-border bg-background px-3.5 py-3 text-[15px] text-foreground"
-                />
+                <input id="f-phone" name="phone" type="tel" required className={inputClass} />
               </div>
               <div>
-                <label htmlFor="f-message" className="mb-1.5 block text-[13px] font-bold text-muted-foreground">
+                <label htmlFor="f-message" className="mb-1.5 block text-[13px] font-bold text-haze">
                   Message (optionnel)
                 </label>
-                <textarea
-                  id="f-message"
-                  name="message"
-                  rows={3}
-                  className="w-full resize-y rounded-xl border border-border bg-background px-3.5 py-3 text-[15px] text-foreground"
-                />
+                <textarea id="f-message" name="message" rows={3} className={`${inputClass} resize-y`} />
               </div>
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="mt-1.5 rounded-full bg-accent py-4 text-[15px] font-extrabold text-accent-foreground transition-transform hover:scale-[1.02] disabled:opacity-60"
+                className="mt-1.5 border border-primary bg-primary py-4 text-[15px] font-semibold text-primary-foreground transition-[transform,box-shadow] duration-[140ms] ease-signature hover:scale-[1.02] hover:shadow-[0_0_24px_2px_var(--ember-dim)] disabled:pointer-events-none disabled:opacity-50"
               >
                 {status === "sending" ? "Envoi..." : "Réserver un appel"}
               </button>
               {status === "error" && (
-                <p className="m-0 text-sm font-semibold text-red-600">
+                <p className="m-0 text-sm font-semibold text-destructive">
                   Une erreur est survenue, réessayez ou appelez-nous directement.
                 </p>
               )}
